@@ -1,9 +1,34 @@
 #include <Arduino.h>
 
+String SPEED = "T250";
+String DELAY = "D250";
+
+String SPEED2 = "T500";
+String DELAY2 = "D500";
+
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
+  //reset leg positions
+  Serial.println("#1P1500#2P1400#3P2000#4P1500#5P1500#6P1250#7P2000#8P1500#9P1500#10P1250#11P2000#12P1500#13P1500#14P1500#15P1000#16P1500#17P1500#18P1500#19P1000#20P1500#21P1500#22P1700#23P1000#24P1500#25P1500#26P1500#27P1500#28P1500#29P1500#30P1500#31P1500#32P1500"+SPEED+DELAY);
+}
+
+void walkCycle() {
+  Serial.println("#13P1200#14P1200#15P1000"+SPEED+DELAY);
+  Serial.println("#14P1550#15P1100"+SPEED+DELAY);
+  Serial.println("#18P1300#19P1200#22P1700"+SPEED+DELAY);
+  Serial.println("#18P1600"+SPEED+DELAY);
+  Serial.println("#21P1700#22P1400"+SPEED+DELAY);
+  Serial.println("#22P1800#23P1100"+SPEED+DELAY);
+  Serial.println("#1P1800#2P1700#6P1250"+SPEED+DELAY);
+  Serial.println("#2P1400"+SPEED+DELAY);
+  Serial.println("#6P1600#7P2250"+SPEED+DELAY);
+  Serial.println("#6P1400"+SPEED+DELAY);
+  Serial.println("#1P1500#2P1400#6P1250#7P2000#9P1800#13P1500#14P1500#15P1000#18P1500#19P1000#21P1500#22P1700#23P1000"+SPEED2+DELAY2);
+  Serial.println("#9P1500#10P1550"+SPEED+DELAY);
+  Serial.println("#10P1250"+SPEED+DELAY);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  walkCycle();
 }
+
