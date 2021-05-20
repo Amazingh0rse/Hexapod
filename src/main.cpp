@@ -1,13 +1,28 @@
 #include <Arduino.h>
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
 
 String SPEED = "T100";
 String SPEED2 = "T500";
 
+const char *ssid = "nodemcu";
+const char *pass = "nodemcu";
+
 long DELAY = 500;
 
-void setup() {
-  Serial.begin(9600);
-  delay(50);
+ESP8266WebServer server(80);
+
+void handleRoot() {
+  server.send(200,"text/html", "<h1>Hello World!</h1>");
+}
+
+void handleWalk() {
+  server.send(200,"text/html", "<h1>Hello World!</h1>");
+
+  while(server.uri() == "/forward") {
+    walkCycle();
+  }
 }
 
 void walkCycle() {
@@ -48,6 +63,26 @@ void rotationCycle() {
   delay(DELAY);
 }
 
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+
+  Serial.begin(9600);
+  WiFi.softAP(ssid, pass);
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+
+  server.on("/", handleRoot);
+  server.on("/forward", handleWalk);
+  server.begin();
+  
+}
+
 void loop() {
-  rotationCycle();
+  server.handleClient();
 }
