@@ -3,12 +3,15 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 
-String SPEED = "T100";
-String SPEED2 = "T500";
+const String SPEED = "T100";
+const String SPEED2 = "T500";
+const int ITERATION_COUNT = 5;
+int iteration = 0;
 
 const char *ssid = "nodemcu";
 const char *pass = "nodemcupassword69";
 ESP8266WebServer server(80);
+String html = "<!DOCTYPE html><html><head><title>Robocontrollerl</title></head><body><h1>Robocontroller</h1><a href=\"forward\"><button >forward</button></a><br><a href=\"left\"><button>left</button></a><a href=\"right\"><button>right</button></a></body></html>";
 
 bool doWalk = false;
 bool doLeft = false;
@@ -59,8 +62,12 @@ void walkCycle() {
 
   if(timeSinceStart >= DELAY*7) {
     Serial.println("#1P1500#6P1250#7P2000#9P1500#13P1500#14P1500#15P1000#18P1500#19P1000#21P1500#22P1700#23P1000"+SPEED2+"D500");
+    ++iteration;
+    if(iteration >= ITERATION_COUNT) {
+      iteration = 0;
+      doWalk = false;
+    }
     hasReset = false;
-    doWalk = false;
     for(int i = 0; i < 6; ++i) {
       walkStepCheck[i] = false;
     }
@@ -107,7 +114,12 @@ void leftRotationCycle() {
 
   if(timeSinceStart >= DELAY*7) {
     Serial.println("#1P1500#5P1550#9P1500#13P1500#17P1450#21P1500"+SPEED+"D500");
-    doLeft = false;
+    ++iteration;
+    if(iteration >= ITERATION_COUNT) {
+      iteration = 0;
+      doLeft = false;
+    }
+
     hasReset = false;
     for(int i = 0; i < 6; ++i) {
       rotationStepCheck[i] = false;
@@ -155,7 +167,11 @@ void rightRotationCycle() {
 
   if(timeSinceStart >= DELAY*7) {
     Serial.println("#1P1500#5P1550#9P1500#13P1200#17P1450#21P1500"+SPEED+"D500");
-    doRight = false;
+    ++iteration;
+    if(iteration >= ITERATION_COUNT) {
+      iteration = 0;
+      doRight = false;
+    }
     hasReset = false;
     for(int i = 0; i < 6; ++i) {
       rotationStepCheck[i] = false;
@@ -166,21 +182,21 @@ void rightRotationCycle() {
 
 
 void handleRoot() {
-  server.send(200,"text/html", "<h1>Hello World!</h1>");
+  server.send(200,"text/html", html);
 }
 
 void handleWalk() {
-  server.send(200,"text/html", "<h1>walk!</h1>");
+  server.send(200,"text/html", html);
   doWalk = true;
 }
 
 void handleLeft() {
-  server.send(200, "text/html", "<h1>rotate left!");
+  server.send(200, "text/html", html);
   doLeft = true;
 }
 
 void handleRight() {
-  server.send(200, "text/html", "<h1>rotate right!");
+  server.send(200, "text/html", html);
   doRight = true;
 }
 
