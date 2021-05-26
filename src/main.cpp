@@ -207,14 +207,7 @@ void setup() {
   Serial.begin(9600);
   Serial.setDebugOutput(true);
   WiFi.softAP(ssid, pass);
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(500);
-    digitalWrite(LED_BUILTIN, LOW);
-  }
-
+  delay(5000);
   server.on("/", handleRoot);
   server.on("/forward", handleWalk);
   server.on("/left", handleLeft);
